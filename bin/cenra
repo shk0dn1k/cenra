@@ -22,7 +22,7 @@ case "$CMD" in
     ;;
 
   update)
-    echo "🔄 Checking for updates..."
+    echo "Checking for updates..."
 
     cd $REPO_DIR || exit 1
 
@@ -32,19 +32,19 @@ case "$CMD" in
     REMOTE=$(git rev-parse origin/main)
 
     if [ "$LOCAL" = "$REMOTE" ]; then
-        echo "✅ cenra is already up to date"
+        echo "cenra is already up to date"
         exit 0
     fi
 
-    echo "⬆️ Update found. Pulling changes..."
+    echo "Update found. Pulling changes..."
 
     git pull origin main
 
-    echo "🔧 Reinstalling cenra..."
+    echo "Reinstalling cenra..."
 
     bash install.sh
 
-    echo "🎉 cenra updated successfully"
+    echo "cenra updated successfully"
     ;;
 
   *)
