@@ -16,8 +16,8 @@ case "$CMD" in
     echo "Version: $VERSION"
     echo "---"
     echo "Commands:"
-    echo "  cenra help     Show help"
-    echo "  cenra update   Update CLI from Git"
+    printf "  %-18s %s\n" "help ..........."   "Show help"
+    printf "  %-18s %s\n" "update ........."   "Update CLI"
     echo ""
     ;;
 
