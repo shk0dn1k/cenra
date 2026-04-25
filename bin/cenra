@@ -2,15 +2,12 @@
 
 CMD=$1
 
-VERSION="v1.0.0"
-
-REPO_DIR="$HOME/cenra"
-
-INSTALL_DIR="$HOME/.cenra/bin"
-
 case "$CMD" in
 
-  help)
+# -------------------------
+# HELP
+# -------------------------
+help)
 echo
 echo "╭──────────────────────────────╮"
 echo "│      C E N R A • v1.0.0      │"
@@ -19,42 +16,57 @@ echo
 echo "Commands:"
 echo "  cenra"
 echo "    ├── help ........... Show help"
-echo "    └── update ......... Update CLI"
+echo "    ├── update ......... Update CLI"
+echo "    └── users ........... Manage users"
 echo
-
+echo "Tip: cenra update"
 echo
-echo "Tip: run 'cenra update'"
-echo
-    ;;
+;;
 
-  update)
-    echo "Checking for updates..."
+# -------------------------
+# UPDATE (твоя логика сохранена)
+# -------------------------
+update)
+echo "Checking for updates..."
 
-    cd $REPO_DIR || exit 1
+cd ~/cenra || exit 1
 
-    git fetch origin
+git fetch origin
 
-    LOCAL=$(git rev-parse HEAD)
-    REMOTE=$(git rev-parse origin/main)
+LOCAL=$(git rev-parse HEAD)
+REMOTE=$(git rev-parse origin/main)
 
-    if [ "$LOCAL" = "$REMOTE" ]; then
-        echo "cenra is already up to date"
-        exit 0
-    fi
+if [ "$LOCAL" = "$REMOTE" ]; then
+    echo "cenra is already up to date"
+    exit 0
+fi
 
-    echo "Update found. Pulling changes..."
+echo "Update found. Pulling changes..."
 
-    git pull origin main
+git pull origin main
 
-    echo "Reinstalling cenra..."
+echo "Reinstalling cenra..."
+bash install.sh
+;;
 
-    bash install.sh
+# -------------------------
+# USERS (НОВЫЙ МОДУЛЬ)
+# -------------------------
+users)
+  if [ -f ~/cenra/modules/users/users.sh ]; then
+    bash ~/cenra/modules/users/users.sh
+  else
+    echo "users module not installed"
+    echo "run: cenra update or reinstall cenra"
+  fi
+;;
 
-    echo "cenra updated successfully"
-    ;;
-
-  *)
-    echo "Unknown command. Try: cenra help"
-    ;;
+# -------------------------
+# DEFAULT
+# -------------------------
+*)
+echo "Unknown command"
+echo "Try: cenra help"
+;;
 
 esac

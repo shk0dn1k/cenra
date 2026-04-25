@@ -1,24 +1,79 @@
 #!/bin/bash
 
-echo "Installing cenra CLI..."
+echo "Installing cenra..."
 
-INSTALL_DIR="$HOME/.cenra"
+REPO_DIR=$(pwd)
 
-mkdir -p $INSTALL_DIR/bin
+# -------------------------
+# 1. install fzf if missing
+# -------------------------
+if ! command -v fzf &> /dev/null; then
+  echo "Installing fzf..."
 
-cp bin/cenra $INSTALL_DIR/bin/cenra
+  if command -v yum &> /dev/null; then
+    sudo yum install -y fzf
 
-chmod +x $INSTALL_DIR/bin/cenra
+  elif command -v apt &> /dev/null; then
+    sudo apt update
+    sudo apt install -y fzf
 
-# добавляем в PATH (если нет)
-if ! grep -q ".cenra/bin" ~/.zshrc 2>/dev/null; then
-  echo 'export PATH=$PATH:$HOME/.cenra/bin' >> ~/.zshrc
+  else
+    # fallback for mac / other systems
+    if [ ! -d "$HOME/.fzf" ]; then
+      git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+      ~/.fzf/install --all
+    fi
+  fi
+else
+  echo "fzf already installed"
 fi
 
-if ! grep -q ".cenra/bin" ~/.bashrc 2>/dev/null; then
-  echo 'export PATH=$PATH:$HOME/.cenra/bin' >> ~/.bashrc
+# -------------------------
+# 2. make sure scripts exist
+# -------------------------
+if [ ! -f "$REPO_DIR/bin/cenra" ]; then
+  echo "ERROR: bin/cenra not found"
+  exit 1
 fi
 
+if [ ! -d "$REPO_DIR/modules" ]; then
+  echo "ERROR: modules folder not found"
+  exit 1
+fi
+
+# -------------------------
+# 3. permissions
+# -------------------------
+chmod +x bin/cenra
+chmod +x modules/users/users.sh
+chmod +x modules/users/select_company.sh
+
+# -------------------------
+# 4. install binary
+# -------------------------
+mkdir -p ~/.cenra/bin
+
+cp bin/cenra ~/.cenra/bin/cenra
+
+# -------------------------
+# 5. PATH (no duplicates)
+# -------------------------
+SHELL_RC="$HOME/.zshrc"
+
+if [ -f "$HOME/.bashrc" ]; then
+  SHELL_RC="$HOME/.bashrc"
+fi
+
+if ! grep -q ".cenra/bin" "$SHELL_RC"; then
+  echo 'export PATH="$HOME/.cenra/bin:$PATH"' >> "$SHELL_RC"
+  echo "PATH updated in $SHELL_RC"
+else
+  echo "PATH already configured"
+fi
+
+# -------------------------
+# 6. done
+# -------------------------
 echo ""
 echo "cenra installed successfully"
-echo "Run: cenra help"
+echo "run: cenra help"
