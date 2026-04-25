@@ -11,10 +11,10 @@ INSTALL_DIR="$HOME/.cenra/bin"
 case "$CMD" in
 
   help)
-    echo ""
-    echo "🚀 cenra CLI"
+    echo "---"
+    echo "cenra CLI"
     echo "Version: $VERSION"
-    echo ""
+    echo "---"
     echo "Commands:"
     echo "  cenra help     Show help"
     echo "  cenra update   Update CLI from Git"
