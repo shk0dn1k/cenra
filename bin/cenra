@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CMD=$1
+
+case "$CMD" in
+  help)
+    echo ""
+    echo "🚀 cenra - central control CLI"
+    echo ""
+    echo "Usage:"
+    echo "  cenra help        Show help"
+    echo ""
+    echo "Future:"
+    echo "  cenra device ..."
+    echo "  cenra account ..."
+    echo ""
+    ;;
+  *)
+    echo "Unknown command. Try: cenra help"
+    ;;
+esac
