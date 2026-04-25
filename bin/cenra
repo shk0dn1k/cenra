@@ -17,9 +17,12 @@ echo "│      C E N R A • v1.0.0      │"
 echo "╰──────────────────────────────╯"
 echo
 
+echo
 echo "Commands"
-printf "  %-18s %s\n" "help ..........."  "Show help"
-printf "  %-18s %s\n" "update ........." "Update CLI"
+echo "  cenra"
+echo "    ├── help ........... Show help"
+echo "    └── update ......... Update CLI"
+echo
 
 echo
 echo "Tip: run 'cenra update'"
