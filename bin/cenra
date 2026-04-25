@@ -2,19 +2,53 @@
 
 CMD=$1
 
+VERSION="v1.0.0"
+
+REPO_DIR="$HOME/cenra"
+
+INSTALL_DIR="$HOME/.cenra/bin"
+
 case "$CMD" in
+
   help)
     echo ""
-    echo "🚀 cenra - central control CLI"
+    echo "🚀 cenra CLI"
+    echo "Version: $VERSION"
     echo ""
-    echo "Usage:"
-    echo "In progress..."
-    echo "Future:"
-    echo "  cenra device ..."
-    echo "  cenra account ..."
+    echo "Commands:"
+    echo "  cenra help     Show help"
+    echo "  cenra update   Update CLI from Git"
     echo ""
     ;;
+
+  update)
+    echo "🔄 Checking for updates..."
+
+    cd $REPO_DIR || exit 1
+
+    git fetch origin
+
+    LOCAL=$(git rev-parse HEAD)
+    REMOTE=$(git rev-parse origin/main)
+
+    if [ "$LOCAL" = "$REMOTE" ]; then
+        echo "✅ cenra is already up to date"
+        exit 0
+    fi
+
+    echo "⬆️ Update found. Pulling changes..."
+
+    git pull origin main
+
+    echo "🔧 Reinstalling cenra..."
+
+    bash install.sh
+
+    echo "🎉 cenra updated successfully"
+    ;;
+
   *)
     echo "Unknown command. Try: cenra help"
     ;;
+
 esac
